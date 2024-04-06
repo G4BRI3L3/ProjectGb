@@ -1,3 +1,4 @@
+-- SQLite
 CREATE TABLE Utenti (
     UserID SERIAL PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
