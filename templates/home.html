@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Home</title>
+</head>
+<body>
+    <h1>Recipes</h1>
+    {% for recipe in recipes %}
+    <div>
+        <h3>{{ recipe['title'] }}</h3>
+        <p>{{ recipe['content'] }}</p>
+    </div>
+    {% endfor %}
+</body>
+</html>
