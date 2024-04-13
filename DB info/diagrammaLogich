@@ -1,0 +1,6 @@
+Utenti(UserID (Chiave Primaria), Username, Email, PasswordHash)
+Ricette(RicettaID (Chiave Primaria), Titolo, Descrizione, Procedura, DataPubblicazione, UserID (Chiave Esterna))
+Ingredienti(IngredienteID (Chiave Primaria), nome)
+Ricetta_Ingrediente(RicettaIngredienteID (Chiave Primaria), RicettaID (Chiave Esterna), IngredienteID (Chiave Esterna), Quantità)
+Voti(VotoID (Chiave Primaria), Punteggio, RicettaID (Chiave Esterna), UserID (Chiave Esterna))
+Recensioni(RecensioneID (Chiave Primaria),Testo, Voto, Data, RicettaID (Chiave Esterna), UserID (Chiave Esterna))
