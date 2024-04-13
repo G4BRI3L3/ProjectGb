@@ -42,7 +42,7 @@ def index():
     db = get_db()
     cur = db.execute('SELECT id, name, ingredients, procedure, star_rating FROM recipe ORDER BY id DESC')
     recipes = cur.fetchall()
-    return render_template('home2.html', recipes=recipes)
+    return render_template('home.html', recipes=recipes)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
