@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'una_chiave_segreta_molto_sicura'
-app.config['DATABASE'] = 'ricette.db'
+app.config['DATABASE'] = 'site.db'
 
 def get_db():
     if '_database' not in g:
@@ -14,8 +14,7 @@ def get_db():
         g._database = sqlite3.connect(app.config['DATABASE'])
         g._database.row_factory = sqlite3.Row
     return g._database
-# sium
-print("ciao")
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = g.pop('_database', None)
