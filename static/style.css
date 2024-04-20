@@ -1,0 +1,206 @@
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, h1, h2, h3, p, form, ul, li {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Styling the page */
+body {
+    line-height: 1.6;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+}
+
+header {
+    background: linear-gradient(to right, #ff9800, #ff5722); /* Orange gradient */
+    color: #ffffff;
+    padding: 20px 10%;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style-type: none;
+    text-align: center;
+    padding: 10px 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffd54f;
+}
+
+main {
+    
+    margin-top: 20px;
+    background: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #333;
+}
+
+/* Forms styling */
+form {
+    background: #ffffff;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    transition: transform 0.3s ease-in-out;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    background-color: #ff9800; /* Vivid orange */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #e65100; /* Darker shade of orange */
+}
+
+footer {
+    text-align: center;
+    padding: 20px 10%;
+    background: linear-gradient(to right, #ff9800, #ff5722);
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('path/to/your-background.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.login-content {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.login-form button {
+    width: 100%;
+    background: #FF6B6B; /* This is a placeholder, choose your color */
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.social-login-label {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.social-logins {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.social-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #fff;
+}
+
+.fb-btn {
+    background: #3B5998;
+}
+
+.gplus-btn {
+    background: #DB4437;
+}
+
+.twitter-btn {
+    background: #1DA1F2;
+}
+
+/* Add additional styling and responsiveness as needed */
+.login-wrapper {
+    background-image: url('../static/images/login-background.png');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    width: 300px;
+    padding: 20px;
+    background: #fff;
+    /* Aggiungi qui gli altri stili necessari per la tua form box */
+}
+
+/* Altri stili... */
+
+/* Stili generali per tutto il sito */
+body, h1, h2, h3, p, form, ul, li {
+    font-family: Arial, sans-serif;
+}
+
+/* Stili per la classe di sfondo del login */
+.login-background {
+    background: url('../images/login-background.png') no-repeat center center fixed; 
+    background-size: cover;
+}
+
+/* ... altri stili che hai già definito ... */
