@@ -60,12 +60,13 @@ def login():
         password = request.form['password']
         db = get_db()
         user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
-        if user is None or not check_password_hash(user['password_hash'], password):
-            flash('Invalid username or password')
-        else:
+        if user and check_password_hash(user['password_hash'], password):
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return redirect(url_for('index'))  # Reindirizza alla home page se il login è corretto
+        else:
+            flash('Invalid username or password')
     return render_template('login.html')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
