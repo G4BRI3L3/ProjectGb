@@ -10,3 +10,4 @@ def get_db():
 def init_db():
     with open('schema.sql', 'r') as f:
         get_db().executescript(f.read())
+        
