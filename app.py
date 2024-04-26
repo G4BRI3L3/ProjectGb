@@ -61,10 +61,11 @@ def login():
         password = request.form['password']
         db = get_db()
         user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
-        if user and check_password_hash(user['password_hash'], password):
+        if user is None or not check_password_hash(user['password_hash'], password):
+            flash('Invalid username or password')
+        else:
             session['user_id'] = user['id']
             return redirect(url_for('index'))
-        flash('Invalid username or password')
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])

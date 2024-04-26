@@ -203,4 +203,60 @@ body, h1, h2, h3, p, form, ul, li {
     background-size: cover;
 }
 
-/* ... altri stili che hai già definito ... */
+.flashes {
+    margin-bottom: 15px;
+    color: red;
+    list-style: none;
+}
+
+.register-wrapper {
+    background: url('../static/images/register-background.png') no-repeat center center fixed; 
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-box {
+    width: 100%;
+    max-width: 350px;
+    background: #fff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.btn-register {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ff6b6b;
+    color: white;
+    margin-top: 10px;
+}
+
+.btn-register:hover {
+    background-color: #e65100;
+}
+
+.register-form a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.register-form a:hover {
+    text-decoration: underline;
+}
