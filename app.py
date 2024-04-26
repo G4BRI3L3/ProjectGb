@@ -46,12 +46,11 @@ def login_required(view):
 # Modifica la route index per redirigere al login
 @app.route('/')
 def index():
-    if not session.get('user_id'):
-        return redirect(url_for('login'))
     db = get_db()
     cur = db.execute('SELECT id, name, ingredients, procedure, star_rating FROM recipe ORDER BY id DESC')
     recipes = cur.fetchall()
     return render_template('home.html', recipes=recipes)
+
 
 # Aggiorna la route di login per impostare la sessione
 @app.route('/login', methods=['GET', 'POST'])
@@ -75,13 +74,15 @@ def register():
         email = request.form['email']
         password = request.form['password']
         db = get_db()
-        if db.execute('SELECT id FROM user WHERE username = ?', (username,)).fetchone():
-            flash(f"User {username} is already registered.")
-        else:
+        existing_user = db.execute('SELECT id FROM user WHERE username = ?', (username,)).fetchone()
+        if existing_user is None:
             db.execute('INSERT INTO user (username, email, password_hash) VALUES (?, ?, ?)',
                        (username, email, generate_password_hash(password)))
             db.commit()
+            flash('La registrazione è avvenuta con successo!', 'success')
             return redirect(url_for('login'))
+        else:
+            flash('Questo username è già in uso. Prova con un altro.', 'error')
     return render_template('register.html')
 
 @app.route('/recipe/new', methods=['GET', 'POST'])
@@ -108,3 +109,4 @@ def view_recipe(recipe_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
