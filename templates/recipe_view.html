@@ -2,9 +2,28 @@
 
 {% block content %}
     <h2>{{ recipe.name }}</h2>
+    <img src="{{ url_for('static', filename='uploads/' + recipe.image_path) }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
     <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
     <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
     <p><strong>Rating:</strong> {{ recipe.star_rating }} Stars</p>
-    <!-- Aggiunta dell'immagine della ricetta -->
-    <img src="{{ url_for('static', filename='uploads/' + recipe.image_path) }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
+    
+    <!-- Sezione per visualizzare i commenti -->
+    <div class="comments">
+        <h3>Comments</h3>
+        {% for comment in comments %}
+            <div class="comment">
+                <strong>{{ comment.username }} said on {{ comment.created_at }}:</strong>
+                <p>{{ comment.text }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <!-- Sezione per postare un commento -->
+    <section class="comments">
+        <h3>Leave a Comment</h3>
+        <form method="post" action="{{ url_for('submit_comment', recipe_id=recipe.id) }}">
+            <textarea name="comment_text" required></textarea>
+            <button type="submit">Post Comment</button>
+        </form>
+    </section>
+
 {% endblock %}

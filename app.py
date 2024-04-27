@@ -129,7 +129,22 @@ def new_recipe():
 def view_recipe(recipe_id):
     db = get_db()
     recipe = db.execute('SELECT * FROM recipe WHERE id = ?', (recipe_id,)).fetchone()
-    return render_template('recipe_view.html', recipe=recipe)
+    comments = db.execute('SELECT comment.*, user.username FROM comment JOIN user ON comment.user_id = user.id WHERE recipe_id = ? ORDER BY created_at DESC', (recipe_id,)).fetchall()
+    return render_template('recipe_view.html', recipe=recipe, comments=comments)
+
+
+@app.route('/recipe/<int:recipe_id>/comment', methods=['POST'])
+@login_required
+def submit_comment(recipe_id):
+    text = request.form['comment_text']
+    user_id = session['user_id']
+    db = get_db()
+    db.execute('INSERT INTO comment (user_id, recipe_id, text) VALUES (?, ?, ?)',
+               (user_id, recipe_id, text))
+    db.commit()
+    return redirect(url_for('view_recipe', recipe_id=recipe_id))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
