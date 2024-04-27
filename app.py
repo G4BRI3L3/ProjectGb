@@ -3,14 +3,21 @@ import sqlite3
 import click
 from flask.cli import with_appcontext
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'una_chiave_segreta_molto_sicura'
 app.config['DATABASE'] = 'site.db'
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
 
 def get_db():
+    db_path = app.config['DATABASE']
     if '_database' not in g:
-        g._database = sqlite3.connect(app.config['DATABASE'])
+        g._database = sqlite3.connect(db_path)
         g._database.row_factory = sqlite3.Row
     return g._database
 
@@ -25,6 +32,10 @@ def init_db():
     with app.open_resource('schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
 
 @click.command('init-db')
 @with_appcontext
@@ -58,8 +69,10 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        print(username+" "+password)
         db = get_db()
-        user = db.execute('SELECT * FROM user WHERE username = ?', (username,)).fetchone()
+        user = db.execute('SELECT * FROM user WHERE email = ?', (username,)).fetchone()
+        print("user "+str(user))
         if user and check_password_hash(user['password_hash'], password):
             session['user_id'] = user['id']
             return redirect(url_for('index'))  # Reindirizza alla home page se il login è corretto
@@ -76,6 +89,7 @@ def register():
         password = request.form['password']
         db = get_db()
         existing_user = db.execute('SELECT id FROM user WHERE username = ?', (username,)).fetchone()
+        print("existing_user " + str(existing_user))
         if existing_user is None:
             db.execute('INSERT INTO user (username, email, password_hash) VALUES (?, ?, ?)',
                        (username, email, generate_password_hash(password)))
@@ -95,11 +109,24 @@ def new_recipe():
         procedure = request.form['procedure']
         user_id = session['user_id']
         db = get_db()
-        db.execute('INSERT INTO recipe (name, ingredients, procedure, user_id) VALUES (?, ?, ?, ?)',
-                   (name, ingredients, procedure, user_id))
-        db.commit()
-        return redirect(url_for('index'))
+
+        # Gestione del file
+        file = request.files['recipe_image']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # Inserisci tutto nel database inclusa la path dell'immagine
+            db.execute('INSERT INTO recipe (name, ingredients, procedure, user_id, image_path) VALUES (?, ?, ?, ?, ?)',
+                       (name, ingredients, procedure, user_id, file_path))
+            db.commit()
+            return redirect(url_for('index'))
+        else:
+            flash('Allowed file types are - png, jpg, jpeg, gif', 'error')
+    
     return render_template('recipe_form.html')
+
 
 @app.route('/recipe/<int:recipe_id>')
 @login_required
