@@ -5,4 +5,6 @@
     <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
     <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
     <p><strong>Rating:</strong> {{ recipe.star_rating }} Stars</p>
+    <!-- Aggiunta dell'immagine della ricetta -->
+    <img src="{{ url_for('static', filename='uploads/' + recipe.image_path) }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
 {% endblock %}

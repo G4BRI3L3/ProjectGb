@@ -2,7 +2,7 @@
 -- schema.sql
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recipe;
--- ALTER TABLE recipe ADD COLUMN image_path TEXT;
+ALTER TABLE recipe ADD COLUMN image_path TEXT;
 
 
 CREATE TABLE user (
