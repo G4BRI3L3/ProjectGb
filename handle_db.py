@@ -5,7 +5,7 @@ c = conn.cursor()
 
 c.execute(
     '''
-    SELECT * FROM recipe
+    ALTER TABLE recipe ADD COLUMN image_path TEXT;
     '''
 
 )

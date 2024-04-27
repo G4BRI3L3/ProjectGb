@@ -72,7 +72,6 @@ def login():
         print(username+" "+password)
         db = get_db()
         user = db.execute('SELECT * FROM user WHERE email = ?', (username,)).fetchone()
-        print("user "+str(user))
         if user and check_password_hash(user['password_hash'], password):
             session['user_id'] = user['id']
             return redirect(url_for('index'))  # Reindirizza alla home page se il login è corretto
@@ -89,7 +88,6 @@ def register():
         password = request.form['password']
         db = get_db()
         existing_user = db.execute('SELECT id FROM user WHERE username = ?', (username,)).fetchone()
-        print("existing_user " + str(existing_user))
         if existing_user is None:
             db.execute('INSERT INTO user (username, email, password_hash) VALUES (?, ?, ?)',
                        (username, email, generate_password_hash(password)))
@@ -110,14 +108,11 @@ def new_recipe():
         user_id = session['user_id']
         db = get_db()
 
-        # Gestione del file
-        file = request.files['recipe_image']
+        file = request.files.get('recipe_image')
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-
-            # Inserisci tutto nel database inclusa la path dell'immagine
             db.execute('INSERT INTO recipe (name, ingredients, procedure, user_id, image_path) VALUES (?, ?, ?, ?, ?)',
                        (name, ingredients, procedure, user_id, file_path))
             db.commit()
@@ -126,7 +121,6 @@ def new_recipe():
             flash('Allowed file types are - png, jpg, jpeg, gif', 'error')
     
     return render_template('recipe_form.html')
-
 
 @app.route('/recipe/<int:recipe_id>')
 @login_required

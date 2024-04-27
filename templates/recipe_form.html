@@ -2,13 +2,24 @@
 
 {% block content %}
     <h2>Add a New Recipe</h2>
-    <form method="post">
-        <label for="name">Recipe Name:</label>
-        <input type="text" id="name" name="name" required>
-        <label for="ingredients">Ingredients:</label>
-        <textarea id="ingredients" name="ingredients" required></textarea>
-        <label for="procedure">Procedure:</label>
-        <textarea id="procedure" name="procedure" required></textarea>
+    <!-- Aggiungi enctype="multipart/form-data" per permettere l'upload di file -->
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Recipe Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="ingredients">Ingredients:</label>
+            <textarea id="ingredients" name="ingredients" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="procedure">Procedure:</label>
+            <textarea id="procedure" name="procedure" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="recipe_image">Recipe Image:</label>
+            <input type="file" id="recipe_image" name="recipe_image" accept="image/*">
+        </div>
         <button type="submit">Add Recipe</button>
     </form>
 {% endblock %}
