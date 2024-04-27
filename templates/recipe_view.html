@@ -7,6 +7,19 @@
     <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
     <p><strong>Rating:</strong> {{ recipe.star_rating }} Stars</p>
     
+    <!-- In recipe_view.html -->
+    <form method="post" action="{{ url_for('rate_recipe', recipe_id=recipe.id) }}">
+        <label for="rating">Rate this recipe:</label>
+             <select name="rating" id="rating">
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+            </select>
+    <button type="submit">Rate</button>
+    </form>
+
     <!-- Sezione per visualizzare i commenti -->
     <div class="comments">
         <h3>Comments</h3>

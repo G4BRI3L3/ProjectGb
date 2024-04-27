@@ -5,15 +5,15 @@ c = conn.cursor()
 
 c.execute(
     '''
-    CREATE TABLE comment (
+    CREATE TABLE rating (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
     recipe_id INTEGER NOT NULL,
-    text TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user (id),
-    FOREIGN KEY (recipe_id) REFERENCES recipe (id)
+    user_id INTEGER NOT NULL,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    FOREIGN KEY (recipe_id) REFERENCES recipe (id),
+    FOREIGN KEY (user_id) REFERENCES user (id)
 );
+
 
     '''
 

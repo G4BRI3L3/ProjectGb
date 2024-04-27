@@ -125,12 +125,13 @@ def new_recipe():
     return render_template('recipe_form.html')
 
 @app.route('/recipe/<int:recipe_id>')
-@login_required
 def view_recipe(recipe_id):
     db = get_db()
     recipe = db.execute('SELECT * FROM recipe WHERE id = ?', (recipe_id,)).fetchone()
     comments = db.execute('SELECT comment.*, user.username FROM comment JOIN user ON comment.user_id = user.id WHERE recipe_id = ? ORDER BY created_at DESC', (recipe_id,)).fetchall()
-    return render_template('recipe_view.html', recipe=recipe, comments=comments)
+    ratings = db.execute('SELECT AVG(rating) as avg_rating FROM rating WHERE recipe_id = ?', (recipe_id,)).fetchone()
+    
+    return render_template('recipe_view.html', recipe=recipe, comments=comments, recipe_ratings=ratings['avg_rating'])
 
 
 @app.route('/recipe/<int:recipe_id>/comment', methods=['POST'])
@@ -144,6 +145,25 @@ def submit_comment(recipe_id):
     db.commit()
     return redirect(url_for('view_recipe', recipe_id=recipe_id))
 
+@app.route('/recipe/<int:recipe_id>/rate', methods=['POST'])
+@login_required
+def rate_recipe(recipe_id):
+    rating = request.form.get('rating')
+    user_id = session['user_id']
+    db = get_db()
+    
+    # Controlla se l'utente ha già votato
+    existing_rating = db.execute('SELECT * FROM rating WHERE user_id = ? AND recipe_id = ?', (user_id, recipe_id)).fetchone()
+    
+    if existing_rating is None:
+        # Inserisci un nuovo voto
+        db.execute('INSERT INTO rating (recipe_id, user_id, rating) VALUES (?, ?, ?)', (recipe_id, user_id, rating))
+    else:
+        # Aggiorna il voto esistente
+        db.execute('UPDATE rating SET rating = ? WHERE user_id = ? AND recipe_id = ?', (rating, user_id, recipe_id))
+    
+    db.commit()
+    return redirect(url_for('view_recipe', recipe_id=recipe_id))
 
 
 if __name__ == '__main__':
