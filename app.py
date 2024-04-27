@@ -101,7 +101,9 @@ def register():
 @app.route('/recipe/new', methods=['GET', 'POST'])
 @login_required
 def new_recipe():
+    print("sium")
     if request.method == 'POST':
+        print("entre!!")
         name = request.form['name']
         ingredients = request.form['ingredients']
         procedure = request.form['procedure']
