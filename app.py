@@ -171,7 +171,6 @@ def view_recipe(recipe_id):
     return render_template('recipe_view.html', recipe=recipe, comments=comments, user_rating=user_rating)
 
 
-
 @app.route('/recipe/<int:recipe_id>/comment', methods=['POST'])
 @login_required
 def submit_comment(recipe_id):
@@ -237,6 +236,16 @@ def my_favorites():
         (user_id,)
     ).fetchall()
     return render_template('my_favorites.html', favorites=favorites)
+
+@app.route('/remove_from_favorites/<int:recipe_id>', methods=['POST'])
+@login_required
+def remove_from_favorites(recipe_id):
+    user_id = session['user_id']
+    db = get_db()
+    db.execute('DELETE FROM favorites WHERE user_id = ? AND recipe_id = ?', (user_id, recipe_id))
+    db.commit()
+    flash('{{ Recipe removed from your favorites!', 'info')
+    return redirect(url_for('my_favorites'))
 
 if __name__ == '__main__':
     app.run(debug=True)
