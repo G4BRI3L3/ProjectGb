@@ -133,13 +133,15 @@ def new_recipe():
     
     return render_template('recipe_form.html')
 
+
+
 @app.route('/recipe/<int:recipe_id>')
 def view_recipe(recipe_id):
     db = get_db()
     # Recupera i dettagli della ricetta dal database
     recipe_data = db.execute('SELECT * FROM recipe WHERE id = ?', (recipe_id,)).fetchone()
     recipe = dict(recipe_data)  # Converti in un dizionario mutabile
-    
+
     # Recupera i commenti associati alla ricetta
     comments = db.execute(
         'SELECT comment.*, user.username FROM comment '
@@ -147,18 +149,26 @@ def view_recipe(recipe_id):
         'WHERE recipe_id = ? ORDER BY comment.created_at DESC',
         (recipe_id,)
     ).fetchall()
-    
+
     # Calcola la media dei voti per la ricetta
     rating_result = db.execute(
         'SELECT AVG(rating) as average_rating FROM rating '
         'WHERE recipe_id = ?',
         (recipe_id,)
     ).fetchone()
-    
     # Aggiungi la media dei voti al dizionario della ricetta
     recipe['average_rating'] = rating_result['average_rating'] if rating_result['average_rating'] else 'Not yet rated'
 
-    return render_template('recipe_view.html', recipe=recipe, comments=comments)
+    # Ottieni il voto corrente dell'utente, se esiste
+    user_rating = None
+    if 'user_id' in session:
+        user_rating = db.execute(
+            'SELECT rating FROM rating WHERE user_id = ? AND recipe_id = ?',
+            (session['user_id'], recipe_id)
+        ).fetchone()
+        user_rating = user_rating['rating'] if user_rating else None
+
+    return render_template('recipe_view.html', recipe=recipe, comments=comments, user_rating=user_rating)
 
 
 
@@ -173,25 +183,37 @@ def submit_comment(recipe_id):
     db.commit()
     return redirect(url_for('view_recipe', recipe_id=recipe_id))
 
+
 @app.route('/recipe/<int:recipe_id>/rate', methods=['POST'])
 @login_required
 def rate_recipe(recipe_id):
-    rating = request.form.get('rating')
     user_id = session['user_id']
+    new_rating = request.form.get('rating')
+
     db = get_db()
-    
     # Controlla se l'utente ha già votato
-    existing_rating = db.execute('SELECT * FROM rating WHERE user_id = ? AND recipe_id = ?', (user_id, recipe_id)).fetchone()
-    
-    if existing_rating is None:
-        # Inserisci un nuovo voto
-        db.execute('INSERT INTO rating (recipe_id, user_id, rating) VALUES (?, ?, ?)', (recipe_id, user_id, rating))
-    else:
+    existing_rating = db.execute(
+        'SELECT rating FROM rating WHERE user_id = ? AND recipe_id = ?',
+        (user_id, recipe_id)
+    ).fetchone()
+
+    if existing_rating:
         # Aggiorna il voto esistente
-        db.execute('UPDATE rating SET rating = ? WHERE user_id = ? AND recipe_id = ?', (rating, user_id, recipe_id))
+        db.execute(
+            'UPDATE rating SET rating = ? WHERE user_id = ? AND recipe_id = ?',
+            (new_rating, user_id, recipe_id)
+        )
+    else:
+        # Inserisci un nuovo voto
+        db.execute(
+            'INSERT INTO rating (user_id, recipe_id, rating) VALUES (?, ?, ?)',
+            (user_id, recipe_id, new_rating)
+        )
     
     db.commit()
+    flash('Grazie per il tuo voto!', 'success')
     return redirect(url_for('view_recipe', recipe_id=recipe_id))
+
 
 
 if __name__ == '__main__':
