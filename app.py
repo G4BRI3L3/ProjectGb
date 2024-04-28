@@ -214,7 +214,29 @@ def rate_recipe(recipe_id):
     flash('Grazie per il tuo voto!', 'success')
     return redirect(url_for('view_recipe', recipe_id=recipe_id))
 
+@app.route('/add_to_favorites/<int:recipe_id>', methods=['POST'])
+@login_required
+def add_to_favorites(recipe_id):
+    user_id = session['user_id']
+    db = get_db()
+    try:
+        db.execute('INSERT INTO favorites (user_id, recipe_id) VALUES (?, ?)', (user_id, recipe_id))
+        db.commit()
+        flash('Recipe added to your favorites!', 'success')
+    except sqlite3.IntegrityError:  # Gestisce il caso in cui la coppia user_id, recipe_id sia già presente
+        flash('This recipe is already in your favorites!', 'info')
+    return redirect(url_for('view_recipe', recipe_id=recipe_id))
 
+@app.route('/my_favorites')
+@login_required
+def my_favorites():
+    user_id = session['user_id']
+    db = get_db()
+    favorites = db.execute(
+        'SELECT r.* FROM recipe r JOIN favorites f ON f.recipe_id = r.id WHERE f.user_id = ?',
+        (user_id,)
+    ).fetchall()
+    return render_template('my_favorites.html', favorites=favorites)
 
 if __name__ == '__main__':
     app.run(debug=True)

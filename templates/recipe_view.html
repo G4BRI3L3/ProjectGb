@@ -22,6 +22,20 @@
         <button type="submit">Rate</button>
     </form>
 
+    <form action="{{ url_for('add_to_favorites', recipe_id=recipe.id) }}" method="post">
+        <button type="submit">Add to Favorites</button>
+    </form>
+    
+    
+    <!-- Sezione per aggiungere un nuovo commento -->
+    <section class="comments">
+        <h3>Leave a Comment</h3>
+        <form method="post" action="{{ url_for('submit_comment', recipe_id=recipe.id) }}">
+            <textarea name="comment_text" required></textarea>
+            <button type="submit">Post Comment</button>
+        </form>
+    </section>
+    
     <!-- Sezione per visualizzare i commenti esistenti -->
     <div class="comments">
         <h3>Comments</h3>
@@ -33,12 +47,5 @@
         {% endfor %}
     </div>
 
-    <!-- Sezione per aggiungere un nuovo commento -->
-    <section class="comments">
-        <h3>Leave a Comment</h3>
-        <form method="post" action="{{ url_for('submit_comment', recipe_id=recipe.id) }}">
-            <textarea name="comment_text" required></textarea>
-            <button type="submit">Post Comment</button>
-        </form>
-    </section>
+    
 {% endblock %}

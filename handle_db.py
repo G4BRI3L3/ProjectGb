@@ -5,15 +5,14 @@ c = conn.cursor()
 
 c.execute(
     '''
-    CREATE TABLE rating (
+CREATE TABLE favorites (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    recipe_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    recipe_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (recipe_id) REFERENCES recipe (id),
-    FOREIGN KEY (user_id) REFERENCES user (id)
+    UNIQUE (user_id, recipe_id)  -- Questo assicura che la stessa ricetta non venga aggiunta più volte dagli stessi utenti
 );
-
 
     '''
 
