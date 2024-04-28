@@ -16,6 +16,8 @@
                 <li><a href="{{ url_for('login') }}">Login</a></li>
                 <li><a href="{{ url_for('register') }}">Register</a></li>
                 <li><a href="{{ url_for('new_recipe') }}">Add Recipe</a></li>
+                <!-- Link alla pagina della ricetta casuale -->
+                <li><a href="{{ url_for('random_recipe') }}">Random Recipe</a></li>
                 <!-- Condizione per mostrare "My Favorites" solo agli utenti loggati -->
                 {% if 'user_id' in session %}
                     <li><a href="{{ url_for('my_favorites') }}">My Favorites</a></li>

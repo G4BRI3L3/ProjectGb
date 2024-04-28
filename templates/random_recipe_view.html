@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>{{ recipe.name }}</h2>
+    <img src="{{ recipe.image_path }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
+    <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+    <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
+    <p><strong>Rating:</strong> {{ recipe.average_rating|default('No ratings yet')|round(1) }} Stars</p>
+
+    <!-- Potresti aggiungere qualche dettaglio unico per le ricette casuali qui -->
+    <a href="{{ url_for('random_recipe') }}">Try Another Random Recipe</a>
+{% endblock %}

@@ -5,6 +5,7 @@ from flask.cli import with_appcontext
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
+import random
 
 
 app = Flask(__name__)
@@ -110,9 +111,7 @@ def register():
 @app.route('/recipe/new', methods=['GET', 'POST'])
 @login_required
 def new_recipe():
-    print("sium")
     if request.method == 'POST':
-        print("entre!!")
         name = request.form['name']
         ingredients = request.form['ingredients']
         procedure = request.form['procedure']
@@ -141,7 +140,7 @@ def view_recipe(recipe_id):
     # Recupera i dettagli della ricetta dal database
     recipe_data = db.execute('SELECT * FROM recipe WHERE id = ?', (recipe_id,)).fetchone()
     recipe = dict(recipe_data)  # Converti in un dizionario mutabile
-
+    
     # Recupera i commenti associati alla ricetta
     comments = db.execute(
         'SELECT comment.*, user.username FROM comment '
@@ -149,24 +148,28 @@ def view_recipe(recipe_id):
         'WHERE recipe_id = ? ORDER BY comment.created_at DESC',
         (recipe_id,)
     ).fetchall()
-
+    
     # Calcola la media dei voti per la ricetta
     rating_result = db.execute(
         'SELECT AVG(rating) as average_rating FROM rating '
         'WHERE recipe_id = ?',
         (recipe_id,)
     ).fetchone()
-    # Aggiungi la media dei voti al dizionario della ricetta
-    recipe['average_rating'] = rating_result['average_rating'] if rating_result['average_rating'] else 'Not yet rated'
+    
+    # Assicurati che average_rating sia un float, se non è None
+    if rating_result['average_rating'] is not None:
+        recipe['average_rating'] = float(rating_result['average_rating'])
+    else:
+        recipe['average_rating'] = 'Not yet rated'
 
     # Ottieni il voto corrente dell'utente, se esiste
     user_rating = None
     if 'user_id' in session:
-        user_rating = db.execute(
+        user_rating_query = db.execute(
             'SELECT rating FROM rating WHERE user_id = ? AND recipe_id = ?',
             (session['user_id'], recipe_id)
         ).fetchone()
-        user_rating = user_rating['rating'] if user_rating else None
+        user_rating = user_rating_query['rating'] if user_rating_query else None
 
     return render_template('recipe_view.html', recipe=recipe, comments=comments, user_rating=user_rating)
 
@@ -244,8 +247,25 @@ def remove_from_favorites(recipe_id):
     db = get_db()
     db.execute('DELETE FROM favorites WHERE user_id = ? AND recipe_id = ?', (user_id, recipe_id))
     db.commit()
-    flash('{{ Recipe removed from your favorites!', 'info')
+    flash(' Recipe removed from your favorites!', 'info')
     return redirect(url_for('my_favorites'))
+
+@app.route('/random_recipe')
+def random_recipe():
+    db = get_db()
+    # Recupera tutte le ID delle ricette disponibili
+    recipe_ids = db.execute('SELECT id FROM recipe').fetchall()
+    
+    if recipe_ids:
+        # Scegli un ID a caso dalla lista
+        random_id = random.choice(recipe_ids)['id']
+        # Recupera la ricetta corrispondente all'ID scelto
+        recipe = db.execute('SELECT * FROM recipe WHERE id = ?', (random_id,)).fetchone()
+        return render_template('random_recipe_view.html', recipe=recipe)
+    else:
+        flash('No recipes available.', 'info')
+        return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
