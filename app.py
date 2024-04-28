@@ -58,9 +58,18 @@ def login_required(view):
 @app.route('/')
 def index():
     db = get_db()
+    # Recupera tutte le ricette e ordina per l'ID in ordine discendente
     cur = db.execute('SELECT id, name, ingredients, procedure, star_rating FROM recipe ORDER BY id DESC')
     recipes = cur.fetchall()
-    return render_template('home.html', recipes=recipes)
+    # Converti ogni riga di recipes in un dizionario
+    recipes_list = [dict(recipe) for recipe in recipes]
+    
+    # Calcola la media dei voti per ogni ricetta
+    for recipe in recipes_list:
+        rating_result = db.execute('SELECT AVG(rating) as average_rating FROM rating WHERE recipe_id = ?', (recipe['id'],)).fetchone()
+        recipe['average_rating'] = rating_result['average_rating'] if rating_result['average_rating'] is not None else 'Not rated'
+    
+    return render_template('home.html', recipes=recipes_list)
 
 
 # Aggiorna la route di login per impostare la sessione
@@ -127,11 +136,30 @@ def new_recipe():
 @app.route('/recipe/<int:recipe_id>')
 def view_recipe(recipe_id):
     db = get_db()
-    recipe = db.execute('SELECT * FROM recipe WHERE id = ?', (recipe_id,)).fetchone()
-    comments = db.execute('SELECT comment.*, user.username FROM comment JOIN user ON comment.user_id = user.id WHERE recipe_id = ? ORDER BY created_at DESC', (recipe_id,)).fetchall()
-    ratings = db.execute('SELECT AVG(rating) as avg_rating FROM rating WHERE recipe_id = ?', (recipe_id,)).fetchone()
+    # Recupera i dettagli della ricetta dal database
+    recipe_data = db.execute('SELECT * FROM recipe WHERE id = ?', (recipe_id,)).fetchone()
+    recipe = dict(recipe_data)  # Converti in un dizionario mutabile
     
-    return render_template('recipe_view.html', recipe=recipe, comments=comments, recipe_ratings=ratings['avg_rating'])
+    # Recupera i commenti associati alla ricetta
+    comments = db.execute(
+        'SELECT comment.*, user.username FROM comment '
+        'JOIN user ON comment.user_id = user.id '
+        'WHERE recipe_id = ? ORDER BY comment.created_at DESC',
+        (recipe_id,)
+    ).fetchall()
+    
+    # Calcola la media dei voti per la ricetta
+    rating_result = db.execute(
+        'SELECT AVG(rating) as average_rating FROM rating '
+        'WHERE recipe_id = ?',
+        (recipe_id,)
+    ).fetchone()
+    
+    # Aggiungi la media dei voti al dizionario della ricetta
+    recipe['average_rating'] = rating_result['average_rating'] if rating_result['average_rating'] else 'Not yet rated'
+
+    return render_template('recipe_view.html', recipe=recipe, comments=comments)
+
 
 
 @app.route('/recipe/<int:recipe_id>/comment', methods=['POST'])

@@ -5,22 +5,26 @@
     <img src="{{ url_for('static', filename='uploads/' + recipe.image_path) }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
     <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
     <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
-    <p><strong>Rating:</strong> {{ recipe.star_rating }} Stars</p>
+    {% if recipe.average_rating %}
+        <p><strong>Rating:</strong> {{ recipe.average_rating }} Stars</p>
+    {% else %}
+        <p>Be the first to rate this recipe!</p>
+    {% endif %}
     
-    <!-- In recipe_view.html -->
+    <!-- Form per la valutazione della ricetta -->
     <form method="post" action="{{ url_for('rate_recipe', recipe_id=recipe.id) }}">
         <label for="rating">Rate this recipe:</label>
-             <select name="rating" id="rating">
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
-            </select>
-    <button type="submit">Rate</button>
+        <select name="rating" id="rating">
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+        </select>
+        <button type="submit">Rate</button>
     </form>
 
-    <!-- Sezione per visualizzare i commenti -->
+    <!-- Sezione per visualizzare i commenti esistenti -->
     <div class="comments">
         <h3>Comments</h3>
         {% for comment in comments %}
@@ -30,7 +34,8 @@
             </div>
         {% endfor %}
     </div>
-    <!-- Sezione per postare un commento -->
+
+    <!-- Sezione per aggiungere un nuovo commento -->
     <section class="comments">
         <h3>Leave a Comment</h3>
         <form method="post" action="{{ url_for('submit_comment', recipe_id=recipe.id) }}">
@@ -38,5 +43,4 @@
             <button type="submit">Post Comment</button>
         </form>
     </section>
-
 {% endblock %}
