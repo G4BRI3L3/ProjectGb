@@ -171,7 +171,7 @@ def view_recipe(recipe_id):
         ).fetchone()
         user_rating = user_rating_query['rating'] if user_rating_query else 0.0
 
-    return render_template('recipe_view.html', recipe=recipe, comments=comments, user_rating=float(user_rating))
+    return render_template('recipe_view.html', recipe=recipe, comments=comments, user_rating = user_rating)
 
 
 @app.route('/recipe/<int:recipe_id>/comment', methods=['POST'])
