@@ -11,7 +11,7 @@ import random
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'una_chiave_segreta_molto_sicura'
 app.config['DATABASE'] = 'site.db'
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 
