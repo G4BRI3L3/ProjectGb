@@ -68,7 +68,7 @@ def index():
     # Calcola la media dei voti per ogni ricetta
     for recipe in recipes_list:
         rating_result = db.execute('SELECT AVG(rating) as average_rating FROM rating WHERE recipe_id = ?', (recipe['id'],)).fetchone()
-        recipe['average_rating'] = rating_result['average_rating'] if rating_result['average_rating'] is not None else 'Not rated'
+        recipe['average_rating'] = float(rating_result['average_rating']) if rating_result['average_rating'] is not None else 0.0
     
     return render_template('home.html', recipes=recipes_list)
 
@@ -160,7 +160,7 @@ def view_recipe(recipe_id):
     if rating_result['average_rating'] is not None:
         recipe['average_rating'] = float(rating_result['average_rating'])
     else:
-        recipe['average_rating'] = 'Not yet rated'
+        recipe['average_rating'] = 0.0
 
     # Ottieni il voto corrente dell'utente, se esiste
     user_rating = None
@@ -169,9 +169,9 @@ def view_recipe(recipe_id):
             'SELECT rating FROM rating WHERE user_id = ? AND recipe_id = ?',
             (session['user_id'], recipe_id)
         ).fetchone()
-        user_rating = user_rating_query['rating'] if user_rating_query else None
+        user_rating = user_rating_query['rating'] if user_rating_query else 0.0
 
-    return render_template('recipe_view.html', recipe=recipe, comments=comments, user_rating=user_rating)
+    return render_template('recipe_view.html', recipe=recipe, comments=comments, user_rating=float(user_rating))
 
 
 @app.route('/recipe/<int:recipe_id>/comment', methods=['POST'])

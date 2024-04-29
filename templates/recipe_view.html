@@ -2,16 +2,16 @@
 
 {% block content %}
     <h2>{{ recipe.name }}</h2>
-    <img src="{{ recipe.image_path }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
+    <img src="../static/{{ recipe.image_path }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
     <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
     <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
 
     <!-- Aggiornato per mostrare valutazioni con controllo appropriato -->
     <p><strong>Rating:</strong>
-        {% if recipe.average_rating != 'No ratings yet' %}
+        {% if recipe.average_rating != 0.0 %}
             {{ recipe.average_rating|round(1) }} Stars
         {% else %}
-            {{ recipe.average_rating }}
+            No rating yet
         {% endif %}
     </p>
 
