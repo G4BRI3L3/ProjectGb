@@ -60,7 +60,7 @@ def login_required(view):
 def index():
     db = get_db()
     # Recupera tutte le ricette e ordina per l'ID in ordine discendente
-    cur = db.execute('SELECT id, name, ingredients, procedure, star_rating FROM recipe ORDER BY id DESC')
+    cur = db.execute('SELECT id, name, ingredients, procedure, image_path FROM recipe ORDER BY id DESC')
     recipes = cur.fetchall()
     # Converti ogni riga di recipes in un dizionario
     recipes_list = [dict(recipe) for recipe in recipes]
@@ -137,9 +137,17 @@ def new_recipe():
 @app.route('/recipe/<int:recipe_id>')
 def view_recipe(recipe_id):
     db = get_db()
-    # Recupera i dettagli della ricetta dal database
-    recipe_data = db.execute('SELECT * FROM recipe WHERE id = ?', (recipe_id,)).fetchone()
-    recipe = dict(recipe_data)  # Converti in un dizionario mutabile
+    recipe_data = db.execute(
+        'SELECT r.*, u.username AS user_name FROM recipe r '
+        'JOIN user u ON r.user_id = u.id '
+        'WHERE r.id = ?', (recipe_id,)
+    ).fetchone()
+    
+    if recipe_data is None:
+        flash('Recipe not found.', 'error')
+        return redirect(url_for('index'))
+    
+    recipe = dict(recipe_data)
     
     # Recupera i commenti associati alla ricetta
     comments = db.execute(
@@ -251,6 +259,7 @@ def remove_from_favorites(recipe_id):
     return redirect(url_for('my_favorites'))
 
 @app.route('/random_recipe')
+@login_required
 def random_recipe():
     db = get_db()
     # Recupera tutte le ID delle ricette disponibili

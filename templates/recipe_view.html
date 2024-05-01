@@ -1,53 +1,61 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h2>{{ recipe.name }}</h2>
-    <img src="../{{ recipe.image_path }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
-    <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
-    <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
+<h2>{{ recipe.name }}</h2>
+<p>Posted by <strong>{{ recipe.user_name }}</strong></p>
+<img src="../{{ recipe.image_path }}" alt="Immagine del piatto" class="recipe-image">
+<p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+<p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
 
+<div class="rating-favorites">
     <!-- Aggiornato per mostrare valutazioni con controllo appropriato -->
-    <p><strong>Rating:</strong>
-        {% if recipe.average_rating != 0.0 %}
-            {{ recipe.average_rating|round(1) }} Stars
-        {% else %}
-            No rating yet
-        {% endif %}
-    </p>
+    <div>
+        <p><strong>Rating:</strong>
+            {% if recipe.average_rating != 0.0 %}
+                {{ recipe.average_rating|round(1) }} Stars
+            {% else %}
+                No rating yet
+            {% endif %}
+        </p>
 
-    <!-- Form per la valutazione della ricetta -->
-    <form method="post" action="{{ url_for('rate_recipe', recipe_id=recipe.id) }}">
-        <label for="rating">Rate this recipe:</label>
-        <select name="rating" id="rating">
-            {% for star in range(1, 6) %}
-                <option value="{{ star }}" {{ 'selected' if user_rating and star == user_rating }}> {{ star }} Star{{ 's' if star > 1 }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Rate</button>
-    </form>
+        <!-- Form per aggiungere ai preferiti -->
+        <div>
+            <form action="{{ url_for('add_to_favorites', recipe_id=recipe.id) }}" method="post">
+                <button type="submit">Add to Favorites</button>
+            </form>
+        </div>
 
-    <!-- Form per aggiungere ai preferiti -->
-    <form action="{{ url_for('add_to_favorites', recipe_id=recipe.id) }}" method="post">
-        <button type="submit">Add to Favorites</button>
-    </form>
-
-    <!-- Sezione per visualizzare i commenti esistenti -->
-    <div class="comments">
-        <h3>Comments</h3>
-        {% for comment in comments %}
-            <div class="comment">
-                <strong>{{ comment.username }} said on {{ comment.created_at }}:</strong>
-                <p>{{ comment.text }}</p>
-            </div>
-        {% endfor %}
+        <!-- Form per la valutazione della ricetta -->
+        <form method="post" action="{{ url_for('rate_recipe', recipe_id=recipe.id) }}">
+            <label for="rating">Rate this recipe:</label>
+            <select name="rating" id="rating">
+                {% for star in range(1, 6) %}
+                    <option value="{{ star }}" {{ 'selected' if user_rating and star == user_rating }}> {{ star }} Star{{ 's' if star > 1 }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Rate</button>
+        </form>
     </div>
 
-    <!-- Sezione per aggiungere un nuovo commento -->
-    <section class="comments">
-        <h3>Leave a Comment</h3>
-        <form method="post" action="{{ url_for('submit_comment', recipe_id=recipe.id) }}">
-            <textarea name="comment_text" required></textarea>
-            <button type="submit">Post Comment</button>
-        </form>
-    </section>
+</div>
+
+<!-- Sezione per visualizzare i commenti esistenti -->
+<div class="comments">
+    <h3>Comments</h3>
+    {% for comment in comments %}
+        <div class="comment">
+            <strong>{{ comment.username }} said on {{ comment.created_at }}:</strong>
+            <p>{{ comment.text }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Sezione per aggiungere un nuovo commento -->
+<section class="comments">
+    <h3>Leave a Comment</h3>
+    <form method="post" action="{{ url_for('submit_comment', recipe_id=recipe.id) }}">
+        <textarea name="comment_text" required></textarea>
+        <button type="submit">Post Comment</button>
+    </form>
+</section>
 {% endblock %}

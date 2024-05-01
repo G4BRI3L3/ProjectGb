@@ -5,7 +5,6 @@ c = conn.cursor()
 
 c.execute(
     '''
-DELETE FROM recipe WHERE image_path = "uploads\es1.png"
 
     '''
 

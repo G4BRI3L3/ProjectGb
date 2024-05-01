@@ -17,7 +17,6 @@ CREATE TABLE recipe (
     name TEXT NOT NULL,
     ingredients TEXT NOT NULL,
     procedure TEXT NOT NULL,
-    star_rating REAL DEFAULT 0,
     user_id INTEGER,
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
@@ -39,4 +38,13 @@ CREATE TABLE rating (
     rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     FOREIGN KEY (recipe_id) REFERENCES recipe (id),
     FOREIGN KEY (user_id) REFERENCES user (id)
+);
+
+CREATE TABLE favorites (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    recipe_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user (id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe (id),
+    UNIQUE (user_id, recipe_id)  -- Questo assicura che la stessa ricetta non venga aggiunta più volte dagli stessi utenti
 );
