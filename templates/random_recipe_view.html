@@ -1,10 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div class="recipe-random-wrapper">
     <h2>{{ recipe.name }}</h2>
-    <img src="../{{ recipe.image_path }}" alt="Immagine del piatto" style="max-width: 100%; height: auto;">
-    <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
-    <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
-    <!-- Aggiungere pulsanti o link per una migliore navigazione -->
-    <a href="{{ url_for('random_recipe') }}" class="btn btn-primary">Try Another Random Recipe</a>
+    <img src="../{{ recipe.image_path }}" alt="Immagine del piatto" class="recipe-random-image">
+    <div class="recipe-random-details">
+        <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+        <p><strong>Procedure:</strong> {{ recipe.procedure }}</p>
+    </div>
+    <button onclick="location.href='{{ url_for('random_recipe') }}'" class="btn-random-recipe">Try Another Random Recipe</button>
+</div>
 {% endblock %}

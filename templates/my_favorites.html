@@ -2,15 +2,17 @@
 
 {% block content %}
 <h2>My Favorite Recipes</h2>
-<ul>
+<div class="favorite-recipes">
     {% for recipe in favorites %}
-    <li>
-        <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">{{ recipe.name }}</a>
-        <!-- Form per rimuovere la ricetta dai preferiti -->
-        <form action="{{ url_for('remove_from_favorites', recipe_id=recipe.id) }}" method="post" style="display: inline;">
-            <button type="submit">Remove from Favorites </button>
-        </form>
-    </li>
+    <div class="favorite-item">
+        <img src="../{{ recipe.image_path }}" alt="Immagine del piatto" class="favorite-image">
+        <div class="recipe-details">
+            <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}" class="recipe-name">{{ recipe.name }}</a>
+            <form action="{{ url_for('remove_from_favorites', recipe_id=recipe.id) }}" method="post">
+                <button type="submit" class="remove-button">Remove from Favorites</button>
+            </form>
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

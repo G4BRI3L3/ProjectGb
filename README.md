@@ -78,5 +78,3 @@ Tuttavia, possiamo fornire una struttura generale per una relazione tecnica che 
 - Conclusioni:
 
   - Breve riassunto delle principali conclusioni e considerazioni emerse durante lo sviluppo del sito web.
-
-

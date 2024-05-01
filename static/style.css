@@ -1,4 +1,3 @@
-/* Basic Reset */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -9,7 +8,6 @@ body, h1, h2, h3, p, form, ul, li {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-/* Styling the page */
 body {
     line-height: 1.6;
     font-size: 16px;
@@ -58,7 +56,6 @@ h1, h2 {
     color: #333;
 }
 
-/* Forms styling */
 form {
     background: #ffffff;
     padding: 20px;
@@ -84,7 +81,7 @@ form textarea {
 }
 
 form button {
-    background-color: #ff9800; /* Vivid orange */
+    background-color: #ff9800; 
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -94,7 +91,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #e65100; /* Darker shade of orange */
+    background-color: #e65100; 
 }
 
 footer {
@@ -133,7 +130,7 @@ footer {
 
 .login-form button {
     width: 100%;
-    background: #FF6B6B; /* This is a placeholder, choose your color */
+    background: #FF6B6B;
     color: white;
     border: none;
     padding: 15px;
@@ -172,7 +169,6 @@ footer {
     background: #1DA1F2;
 }
 
-/* Add additional styling and responsiveness as needed */
 .login-wrapper {
     background-image: url('../static/images/login-background.png');
     background-size: cover;
@@ -187,17 +183,13 @@ footer {
     width: 300px;
     padding: 20px;
     background: #fff;
-    /* Aggiungi qui gli altri stili necessari per la tua form box */
 }
 
-/* Altri stili... */
 
-/* Stili generali per tutto il sito */
 body, h1, h2, h3, p, form, ul, li {
     font-family: Arial, sans-serif;
 }
 
-/* Stili per la classe di sfondo del login */
 .login-background {
     background: url('../images/login-background.png') no-repeat center center fixed; 
     background-size: cover;
@@ -352,4 +344,80 @@ button:hover {
 select {
     background: white; /* Sfondo bianco per il selettore */
     color: black; /* Testo nero */
+}
+
+.recipe-random-wrapper {
+    text-align: center;
+    max-width: 800px; /* Adjust based on your preference */
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #fff;
+}
+
+.recipe-random-image {
+    max-width: 50%;
+    height: auto;
+    margin: 0 auto; 
+    display: block;
+}
+
+.recipe-random-details {
+    margin-top: 20px;
+}
+
+.btn-random-recipe {
+    background-color: #ff9800; 
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+    margin-top: 20px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-random-recipe:hover {
+    background-color: #e65100; 
+}
+
+.favorite-recipes {
+    margin-top: 20px;
+}
+
+.favorite-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; 
+}
+
+.favorite-image {
+    width: 250px; 
+    height: auto; 
+    margin-right: 20px; 
+}
+
+.recipe-details {
+    flex-grow: 1;
+}
+
+.recipe-name {
+    display: block; 
+    font-size: 1.2em; 
+    color: #333; 
+    margin-bottom: 5px; 
+}
+
+.remove-button {
+    padding: 5px 10px;
+    background-color: #e55330; 
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.remove-button:hover {
+    background-color: #ff9800; 
 }
