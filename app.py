@@ -276,6 +276,12 @@ def random_recipe():
         return redirect(url_for('index'))
 
 
+@app.route('/logout')
+def logout():
+    # Qui vanno le operazioni per terminare la sessione, come rimuovere l'ID dell'utente dalla sessione
+    session.pop('user_id', None)
+    # Dopo aver terminato la sessione, reindirizza l'utente alla pagina di login o alla homepage
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True)
-    

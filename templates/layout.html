@@ -13,12 +13,14 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('register') }}">Register</a></li>
                 <li><a href="{{ url_for('new_recipe') }}">Add Recipe</a></li>
                 <li><a href="{{ url_for('random_recipe') }}">Random Recipe</a></li>
                 {% if 'user_id' in session %}
                     <li><a href="{{ url_for('my_favorites') }}">My Favorites</a></li>
+                    <li>{{ session['username'] }}<a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
                 {% endif %}
             </ul>
         </nav>
