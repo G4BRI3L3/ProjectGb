@@ -77,17 +77,18 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['username']  # Assumo che l'email sia inviata con il nome campo 'username'
         password = request.form['password']
-        print(username+" "+password)
         db = get_db()
-        user = db.execute('SELECT * FROM user WHERE email = ?', (username,)).fetchone()
+        user = db.execute('SELECT * FROM user WHERE email = ?', (email,)).fetchone()
         if user and check_password_hash(user['password_hash'], password):
             session['user_id'] = user['id']
+            session['username'] = user['username']  # Assicurati che la colonna username esista nel DB e sia corretta
             return redirect(url_for('index'))  # Reindirizza alla home page se il login è corretto
         else:
             flash('Invalid username or password')
     return render_template('login.html')
+
 
 
 @app.route('/register', methods=['GET', 'POST'])

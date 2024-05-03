@@ -1,7 +1,5 @@
 -- SQLite
 -- schema.sql
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS recipe;
 ALTER TABLE recipe ADD COLUMN image_path TEXT;
 
 
@@ -46,5 +44,5 @@ CREATE TABLE favorites (
     recipe_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (recipe_id) REFERENCES recipe (id),
-    UNIQUE (user_id, recipe_id)  -- Questo assicura che la stessa ricetta non venga aggiunta più volte dagli stessi utenti
+    UNIQUE (user_id, recipe_id)
 );

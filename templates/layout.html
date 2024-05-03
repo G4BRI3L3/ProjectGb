@@ -12,12 +12,15 @@
         <h1>Ricette di Cucina</h1>
         <nav>
             <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('new_recipe') }}">Add Recipe</a></li>
-                <li><a href="{{ url_for('random_recipe') }}">Random Recipe</a></li>
                 {% if 'user_id' in session %}
-                    <li><a href="{{ url_for('my_favorites') }}">My Favorites</a></li>
-                    <li>{{ session['username'] }}<a href="{{ url_for('logout') }}">Logout</a></li>
+                    <li class="user-name"><strong style="font-size: 1.2em;">Ciao, {{ session['username'] }}</strong></li>
+                {% endif %}
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('new_recipe') }}">Aggiungi Ricetta</a></li>
+                <li><a href="{{ url_for('random_recipe') }}">Non Sai Cosa Preparare</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="{{ url_for('my_favorites') }}">Ricette Preferite</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
                 {% else %}
                     <li><a href="{{ url_for('login') }}">Login</a></li>
                     <li><a href="{{ url_for('register') }}">Register</a></li>
