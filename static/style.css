@@ -222,8 +222,10 @@ body, h1, h2, h3, p, form, ul, li {
 .login-background {
     background: url('../images/login-background.png') no-repeat center center fixed; 
     background-size: cover;
-}
+    overflow-y: hidden;
 
+}
+ 
 .flashes {
     margin-bottom: 15px;
     color: red;
@@ -233,10 +235,18 @@ body, h1, h2, h3, p, form, ul, li {
 .register-wrapper {
     background: url('../static/images/register-background.png') no-repeat center center fixed; 
     background-size: cover;
+    background-position: center;
     height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+}
+
+.register-background {
+    background: url('../static/images/register-background.png') no-repeat center center fixed; 
+    background-size: cover;
+    overflow-y: hidden;
+
 }
 
 .register-box {
@@ -247,6 +257,7 @@ body, h1, h2, h3, p, form, ul, li {
     margin: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
 }
 
 .register-form input[type="text"],
